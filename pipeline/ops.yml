@@ -6,9 +6,9 @@ pipelines:
       - name: django-api-starter-ctoai-pipeline-init16
         sdk: "2"
         packages: ["git", "python3-pip"]
-        description: "Pipeline Migrate"
+        description: "Pipeline Setup"
         steps:
-          - printf "\n-------------------- Migrate --------------------\n\n"
+          - printf "\n-------------------- Setup --------------------\n\n"
           - git clone https://github.com/cto-ai/django-api-starter-ctoai.git
           - cd django-api-starter-ctoai
           - REPO=django-api-starter-ctoai
@@ -22,10 +22,8 @@ pipelines:
           - export DB_PORT=$(sdk secret get DB_PORT)
           - export IS_PIPELINE=True
           - pip3 install -r requirements.txt
-          - sdk track t n pipeline_id:"${REPO}" stage:Migration status:Initiated stage_ref:"${BRANCH}" change_id:"${COMMIT}"
           # - python3 manage.py migrate
-          - sdk track t n pipeline_id:"${REPO}" stage:Migration status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
-          - printf "\n     Migration Succeeded\n\n"
+          - printf "\n     Setup Succeeded\n\n"
       - name: django-api-starter-ctoai-pipeline-test1
         sdk: "2"
         packages: ["git", "python3-pip"]

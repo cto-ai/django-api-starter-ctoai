@@ -121,7 +121,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # If it's the service, use the secret (set using python sdk)
 IS_PIPELINE = get('IS_PIPELINE')
 
-if bool(IS_PIPELINE):
+if IS_PIPELINE == 'True':
   print('Pipeline mode: Using database credentials from shell env')
   DATABASES = {
       'default': {
