@@ -2,17 +2,7 @@ import logging.config
 import os
 import sys
 import dotenv
-# from cto_ai import ux, prompt, sdk
-
-# event = {
-#     "stage": "Deployment",
-#     "status": "Succeeded",
-#     "stage_ref": "956b425e5bee",
-#     "pipeline_id": "Herokuish"
-# }
-# sdk.track([], "", event)
-
-# ux.print(f'successful deployment has been recorded!')
+from cto_ai import ux, prompt, sdk
 
 dotenv.read_dotenv("./env.template")
 
@@ -135,8 +125,8 @@ if bool(IS_PIPELINE):
   print('Pipeline mode: Using database credentials from shell env')
   DATABASES = {
       'default': {
-          # 'ENGINE': 'django.db.backends.postgresql',
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'ENGINE': 'django.db.backends.postgresql',
+          # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
           'NAME': get('DB_NAME'),
           'USER': get('DB_USER'),
           'PASSWORD': get('DB_PASSWORD'),
@@ -148,8 +138,8 @@ else:
   print('Using database credentials from ctoai secrets sdk')
   DATABASES = {
       'default': {
-          # 'ENGINE': 'django.db.backends.postgresql',
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'ENGINE': 'django.db.backends.postgresql',
+          # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
           'NAME': get('DB_NAME'),
           'USER': get('DB_USER'),
           'PASSWORD': get('DB_PASSWORD'),
@@ -358,3 +348,11 @@ if EMAIL_PROVIDER == 'smtp':
 
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 SENDGRID_URL = 'https://api.sendgrid.com/v3/mail/send'
+
+event2 = {
+    "stage": "Deployment",
+    "status": "Succeeded",
+    "stage_ref": "main",
+    "pipeline_id": "django-api-starter-ctoai"
+}
+sdk.track([], "", event2)

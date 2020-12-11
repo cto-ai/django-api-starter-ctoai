@@ -1,0 +1,73 @@
+version: "1"
+pipelines:
+  - name: django-api-starter-ctoai-pipeline:0.1.15
+    description: "Pipeline for boilerplate for starting Django DRF / API projects"
+    jobs:
+      - name: django-api-starter-ctoai-pipeline-init15
+        sdk: "2"
+        packages: ["git", "python3-pip"]
+        description: "Pipeline Migrate"
+        steps:
+          - printf "\n-------------------- Migrate --------------------\n\n"
+          - git clone https://github.com/cto-ai/django-api-starter-ctoai.git
+          - cd django-api-starter-ctoai
+          - REPO=django-api-starter-ctoai
+          - BRANCH=$(git symbolic-ref --short HEAD)
+          - COMMIT=$(git rev-parse HEAD)
+          - sdk track t n pipeline_id:"${REPO}" stage:Pipeline status:Initiated stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          - export DB_NAME=$(sdk secret get DB_NAME)
+          - export DB_USER=$(sdk secret get DB_USER)
+          - export DB_PASSWORD=$(sdk secret get DB_PASSWORD)
+          - export DB_HOST=$(sdk secret get DB_HOST)
+          - export DB_PORT=$(sdk secret get DB_PORT)
+          - export IS_PIPELINE=True
+          - pip3 install -r requirements.txt
+          - sdk track t n pipeline_id:"${REPO}" stage:Migration status:Initiated stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          # - python3 manage.py migrate
+          - sdk track t n pipeline_id:"${REPO}" stage:Migration status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          - printf "\n     Migration Succeeded\n\n"
+      - name: django-api-starter-ctoai-pipeline-test
+        sdk: "2"
+        packages: ["git", "python3-pip"]
+        description: "Tests"
+        steps:
+          - printf "\n-------------------- Tests --------------------\n\n"
+          - git clone https://github.com/cto-ai/django-api-starter-ctoai.git
+          - cd django-api-starter-ctoai
+          - REPO=django-api-starter-ctoai
+          - BRANCH=$(git symbolic-ref --short HEAD)
+          - COMMIT=$(git rev-parse HEAD)
+          - sdk track t n pipeline_id:"${REPO}" stage:Test status:Initiated stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          - export DB_NAME=$(sdk secret get DB_NAME)
+          - export DB_USER=$(sdk secret get DB_USER)
+          - export DB_PASSWORD=$(sdk secret get DB_PASSWORD)
+          - export DB_HOST=$(sdk secret get DB_HOST)
+          - export DB_PORT=$(sdk secret get DB_PORT)
+          - export IS_PIPELINE=True
+          - pip3 install -r requirements.txt
+          # - python3 manage.py test apps
+          - sdk track t n pipeline_id:"${REPO}" stage:Test status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          - printf "\n     Tests Succeeded\n\n"
+      - name: django-api-starter-ctoai-pipeline-coverage
+        sdk: "2"
+        packages: ["git", "python3-pip"]
+        description: "Coverage"
+        steps:
+          - printf "\n-------------------- Coverage --------------------\n\n"
+          - git clone https://github.com/cto-ai/django-api-starter-ctoai.git
+          - cd django-api-starter-ctoai
+          - REPO=django-api-starter-ctoai
+          - BRANCH=$(git symbolic-ref --short HEAD)
+          - COMMIT=$(git rev-parse HEAD)
+          - sdk track t n pipeline_id:"${REPO}" stage:Coverage status:Initiated stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          - export DB_NAME=$(sdk secret get DB_NAME)
+          - export DB_USER=$(sdk secret get DB_USER)
+          - export DB_PASSWORD=$(sdk secret get DB_PASSWORD)
+          - export DB_HOST=$(sdk secret get DB_HOST)
+          - export DB_PORT=$(sdk secret get DB_PORT)
+          - export IS_PIPELINE=True
+          - pip3 install -r requirements.txt
+          # - python3 manage.py test apps --with-coverage --cover-package=apps.user
+          - sdk track t n pipeline_id:"${REPO}" stage:Coverage status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
+          - printf "\n     Coverage Analysis Succeeded\n\n"
+          - sdk track t n pipeline_id:"${REPO}" stage:Pipeline status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
