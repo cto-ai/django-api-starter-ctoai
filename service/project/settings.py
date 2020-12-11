@@ -135,9 +135,11 @@ if not IS_PIPELINE:
   DATABASES = {
       'default': {
           'ENGINE': 'django.db.backends.postgresql',
-          'NAME': get('DB_NAME'), # use cto-ai secrets
-          'USER': get('DB_USER'), # use cto-ai secrets
-          'PASSWORD': get('DB_PASSWORD') # use cto-ai secrets
+          'NAME': get('DB_NAME'),
+          'USER': get('DB_USER'),
+          'PASSWORD': get('DB_PASSWORD'),
+          'HOST': get('DB_HOST'),
+          'PORT': get('DB_PORT')
       }
   }
 

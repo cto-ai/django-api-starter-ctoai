@@ -3,7 +3,7 @@ version: "1"
 services:
   - name: django-api-starter-ctoai:0.1.18
     public: false
-    description: Boilerplate for starting Django DRF / API projects
+    description: "Boilerplate for starting Django DRF / API projects"
     run: gunicorn project.wsgi -c python:project.gunicorn -b localhost:8080
     remote: true
     sdk: "2"
