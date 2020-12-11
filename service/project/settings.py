@@ -1,17 +1,20 @@
 import logging.config
 import os
 import sys
-from cto_ai import ux, prompt, sdk
+import dotenv
+# from cto_ai import ux, prompt, sdk
 
-event = {
-    "stage": "Deployment",
-    "status": "Succeeded",
-    "stage_ref": "956b425e5bee",
-    "pipeline_id": "Herokuish"
-}
-sdk.track([], "", event)
+# event = {
+#     "stage": "Deployment",
+#     "status": "Succeeded",
+#     "stage_ref": "956b425e5bee",
+#     "pipeline_id": "Herokuish"
+# }
+# sdk.track([], "", event)
 
-ux.print(f'successful deployment has been recorded!')
+# ux.print(f'successful deployment has been recorded!')
+
+dotenv.read_dotenv("./env.template")
 
 def get(variable):
     """
@@ -33,15 +36,12 @@ DEV = 'dev'
 STAGING = 'staging'
 PRODUCTION = 'production'
 TESTING = 'test' in sys.argv
-# ENV = get('DJANGO_ENV')
-ENV = DEV
+ENV = get('DJANGO_ENV')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))).replace('/project', '')
-# SECRET_KEY = get('SECRET_KEY')
-SECRET_KEY = 'xyz'
+SECRET_KEY = get('SECRET_KEY')
 DEBUG = False if ENV == PRODUCTION else True
-# ALLOWED_HOSTS = get('ALLOWED_HOSTS')
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = get('ALLOWED_HOSTS')
 
 AUTH_USER_MODEL = 'user.User'
 
@@ -126,13 +126,20 @@ WSGI_APPLICATION = 'project.wsgi.application'
 #         },
 #     }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django',  #secret
-        'USER': 'postgres', #secret
-        'PASSWORD': 'postgres' #secret
-    },
+
+# If it's the pipeline, use the env var (set using bash sdk)
+# If it's the service, use the secret (set using python sdk)
+IS_PIPELINE = get('IS_PIPELINE')
+
+if not IS_PIPELINE:
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.postgresql',
+          'NAME': get('DB_NAME'), # use cto-ai secrets
+          'USER': get('DB_USER'), # use cto-ai secrets
+          'PASSWORD': get('DB_PASSWORD') # use cto-ai secrets
+      }
+  }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -265,17 +272,11 @@ DJRICHTEXTFIELD_CONFIG = {
     }
 }
 
-AWS_ACCESS_KEY_ID = 'xyz'
-AWS_SECRET_ACCESS_KEY = 'xyz'
-AWS_STORAGE_BUCKET_NAME = 'xyz'
-AWS_LOCATION = 'xyz'
-AWS_DEFAULT_REGION = 'xyz'
-
-# AWS_ACCESS_KEY_ID = get('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = get('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = get('AWS_STORAGE_BUCKET_NAME')
-# AWS_LOCATION = get('AWS_LOCATION')
-# AWS_DEFAULT_REGION = get('AWS_DEFAULT_REGION')
+AWS_ACCESS_KEY_ID = get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = get('AWS_STORAGE_BUCKET_NAME')
+AWS_LOCATION = get('AWS_LOCATION')
+AWS_DEFAULT_REGION = get('AWS_DEFAULT_REGION')
 
 AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = False
@@ -308,41 +309,24 @@ FILE_IMAGE_SIZES = (
 # Facebook Login
 FACEBOOK_GRAPH_VERSION = '3.1'
 
-FACEBOOK_APP_ID = 'xyz'
-FACEBOOK_APP_CLIENT_TOKEN = 'xyz'
-FACEBOOK_APP_SECRET = 'xyz'
+FACEBOOK_APP_ID = get('FACEBOOK_APP_ID')
+FACEBOOK_APP_CLIENT_TOKEN = get('FACEBOOK_APP_CLIENT_TOKEN')
+FACEBOOK_APP_SECRET = get('FACEBOOK_APP_SECRET')
 # This must match the URL specified in the Facebook app login settings "Valid OAuth Redirect URIs"
-FACEBOOK_SUCCESSFUL_LOGIN_URL = 'xyz'
-
-# FACEBOOK_APP_ID = get('FACEBOOK_APP_ID')
-# FACEBOOK_APP_CLIENT_TOKEN = get('FACEBOOK_APP_CLIENT_TOKEN')
-# FACEBOOK_APP_SECRET = get('FACEBOOK_APP_SECRET')
-# # This must match the URL specified in the Facebook app login settings "Valid OAuth Redirect URIs"
-# FACEBOOK_SUCCESSFUL_LOGIN_URL = get('FACEBOOK_SUCCESSFUL_LOGIN_URL')
-
-# Google Login
-GOOGLE_CLIENT_ID = 'xyz'
-GOOGLE_CLIENT_SECRET = 'xyz'
-GOOGLE_SUCCESSFUL_LOGIN_URL = 'xyz'
-GOOGLE_PROJECT_ID = 'xyz'
-GOOGLE_REDIRECT_URI = 'xyz'
-
+FACEBOOK_SUCCESSFUL_LOGIN_URL = get('FACEBOOK_SUCCESSFUL_LOGIN_URL')
 
 # # Google Login
-# GOOGLE_CLIENT_ID = get('GOOGLE_CLIENT_ID')
-# GOOGLE_CLIENT_SECRET = get('GOOGLE_CLIENT_SECRET')
-# GOOGLE_SUCCESSFUL_LOGIN_URL = get('GOOGLE_SUCCESSFUL_LOGIN_URL')
-# GOOGLE_PROJECT_ID = get('GOOGLE_PROJECT_ID')
-# GOOGLE_REDIRECT_URI = get('GOOGLE_REDIRECT_URI')
+GOOGLE_CLIENT_ID = get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = get('GOOGLE_CLIENT_SECRET')
+GOOGLE_SUCCESSFUL_LOGIN_URL = get('GOOGLE_SUCCESSFUL_LOGIN_URL')
+GOOGLE_PROJECT_ID = get('GOOGLE_PROJECT_ID')
+GOOGLE_REDIRECT_URI = get('GOOGLE_REDIRECT_URI')
 
 # MAIL
-# SEND_MAIL = get('SEND_MAIL') == 'True'
-SEND_MAIL = 'False'
-# EMAIL_PROVIDER = os.environ.get('EMAIL_PROVIDER', 'smtp')  # 'smtp' or 'sendgrid'
-EMAIL_PROVIDER = 'sendgrid'
+SEND_MAIL = get('SEND_MAIL') == 'True'
+EMAIL_PROVIDER = os.environ.get('EMAIL_PROVIDER', 'smtp')  # 'smtp' or 'sendgrid'
 
-# WEB_URL = get('WEB_URL')
-WEB_URL = 'xyz'
+WEB_URL = get('WEB_URL')
 
 RESET_PASSWORD_URL = '{}{}'.format(WEB_URL, '/reset-password/{reset_token}/{user_id}')
 DEFAULT_FROM_EMAIL = '___CHANGEME___@example.org'
@@ -355,6 +339,5 @@ if EMAIL_PROVIDER == 'smtp':
     EMAIL_PORT = os.environ.get('SMTP_PORT', 587)
     EMAIL_USE_TLS = True
 
-# SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-SENDGRID_API_KEY = 'xyz'
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 SENDGRID_URL = 'https://api.sendgrid.com/v3/mail/send'
