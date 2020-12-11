@@ -135,8 +135,8 @@ if IS_PIPELINE == 'True':
   print('Using database credentials from env')
   DATABASES = {
       'default': {
-          # 'ENGINE': 'django.db.backends.postgresql',
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'ENGINE': 'django.db.backends.postgresql',
+          # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
           'NAME': get('DB_NAME'),
           'USER': get('DB_USER'),
           'PASSWORD': get('DB_PASSWORD'),
@@ -148,8 +148,8 @@ else:
   print('Using database credentials from ctoai secrets sdk')
   DATABASES = {
       'default': {
-          # 'ENGINE': 'django.db.backends.postgresql',
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'ENGINE': 'django.db.backends.postgresql',
+          # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
           'NAME': get('DB_NAME'),
           'USER': get('DB_USER'),
           'PASSWORD': get('DB_PASSWORD'),
