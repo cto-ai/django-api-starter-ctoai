@@ -1,6 +1,7 @@
 # LATEST REQUIREMENTS
 # Install this requirements file to get the latest version of each dependency.
 # If there are compatibility problems, install from `requirements.txt` instead.
+cto-ai
 arrow
 boto3
 dj-database-url

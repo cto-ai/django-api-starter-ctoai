@@ -1,9 +1,9 @@
 version: "1"
 pipelines:
-  - name: django-api-starter-ctoai-pipeline:0.1.16
+  - name: django-api-starter-ctoai-pipeline:0.1.20
     description: "Pipeline for boilerplate for starting Django DRF / API projects"
     jobs:
-      - name: django-api-starter-ctoai-pipeline-init16
+      - name: django-api-starter-ctoai-pipeline-init20
         sdk: "2"
         packages: ["git", "python3-pip"]
         description: "Pipeline Setup"
@@ -24,7 +24,7 @@ pipelines:
           - pip3 install -r requirements.txt
           # - python3 manage.py migrate
           - printf "\n     Setup Succeeded\n\n"
-      - name: django-api-starter-ctoai-pipeline-test1
+      - name: django-api-starter-ctoai-pipeline-test5
         sdk: "2"
         packages: ["git", "python3-pip"]
         description: "Tests"
@@ -46,7 +46,7 @@ pipelines:
           # - python3 manage.py test apps
           - sdk track t n pipeline_id:"${REPO}" stage:Test status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
           - printf "\n     Tests Succeeded\n\n"
-      - name: django-api-starter-ctoai-pipeline-coverage1
+      - name: django-api-starter-ctoai-pipeline-coverage5
         sdk: "2"
         packages: ["git", "python3-pip"]
         description: "Coverage"
