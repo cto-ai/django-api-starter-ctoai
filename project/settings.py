@@ -140,11 +140,11 @@ else:
       'default': {
           'ENGINE': 'django.db.backends.postgresql',
           # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-          'NAME': get('DB_NAME'),
-          'USER': get('DB_USER'),
-          'PASSWORD': get('DB_PASSWORD'),
-          'HOST': get('DB_HOST'),
-          'PORT': get('DB_PORT')
+          'NAME': sdk.get_secret('DB_NAME'),
+          'USER': sdk.get_secret('DB_USER'),
+          'PASSWORD': sdk.get_secret('DB_PASSWORD'),
+          'HOST': sdk.get_secret('DB_HOST'),
+          'PORT': sdk.get_secret('DB_PORT')
       }
   }
 
