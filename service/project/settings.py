@@ -108,20 +108,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-if ENV in [STAGING, PRODUCTION]:
-    import dj_database_url
-    DATABASES = {
-        'default': dj_database_url.config(conn_max_age=500),
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'django',  # ___CHANGEME___
-            'USER': 'postgres',
-            'PASSWORD': 'postgres'
-        },
-    }
+#
+# Commented out in favour of using cto-ai secrets
+#
+# if ENV in [STAGING, PRODUCTION]:
+#     import dj_database_url
+#     DATABASES = {
+#         'default': dj_database_url.config(conn_max_age=500),
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'django',  # ___CHANGEME___
+#             'USER': 'postgres',
+#             'PASSWORD': 'postgres'
+#         },
+#     }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django',  #secret
+        'USER': 'postgres', #secret
+        'PASSWORD': 'postgres' #secret
+    },
 
 AUTH_PASSWORD_VALIDATORS = [
     {
