@@ -1,0 +1,14 @@
+version: "1"
+# commands:
+services:
+  - name: django-api-starter-ctoai:0.1.6
+    public: false
+    description: Boilerplate for starting Django DRF / API projects
+    # run: python3 /ops/main.py
+    run: gunicorn project.wsgi -c python:project.gunicorn -b localhost:8080
+    remote: true
+    sdk: "2"
+    sourceCodeURL: ""
+    mountCwd: false
+    mountHome: false
+    port: [ '8080:8080' ]
