@@ -1,9 +1,9 @@
 version: "1"
 pipelines:
-  - name: django-api-starter-ctoai-pipeline:0.1.20
+  - name: django-api-starter-ctoai-pipeline:0.1.22
     description: "Pipeline for boilerplate for starting Django DRF / API projects"
     jobs:
-      - name: django-api-starter-ctoai-pipeline-init20
+      - name: django-api-starter-ctoai-pipeline-init22
         sdk: "2"
         packages: ["git", "python3-pip"]
         description: "Pipeline Setup"
@@ -22,9 +22,9 @@ pipelines:
           - export DB_PORT=$(sdk secret get DB_PORT)
           - export IS_PIPELINE=True
           - pip3 install -r requirements.txt
-          # - python3 manage.py migrate
+          - python3 manage.py migrate
           - printf "\n     Setup Succeeded\n\n"
-      - name: django-api-starter-ctoai-pipeline-test5
+      - name: django-api-starter-ctoai-pipeline-test22
         sdk: "2"
         packages: ["git", "python3-pip"]
         description: "Tests"
@@ -43,10 +43,10 @@ pipelines:
           - export DB_PORT=$(sdk secret get DB_PORT)
           - export IS_PIPELINE=True
           - pip3 install -r requirements.txt
-          # - python3 manage.py test apps
+          - python3 manage.py test apps
           - sdk track t n pipeline_id:"${REPO}" stage:Test status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
           - printf "\n     Tests Succeeded\n\n"
-      - name: django-api-starter-ctoai-pipeline-coverage5
+      - name: django-api-starter-ctoai-pipeline-coverage22
         sdk: "2"
         packages: ["git", "python3-pip"]
         description: "Coverage"
@@ -65,7 +65,7 @@ pipelines:
           - export DB_PORT=$(sdk secret get DB_PORT)
           - export IS_PIPELINE=True
           - pip3 install -r requirements.txt
-          # - python3 manage.py test apps --with-coverage --cover-package=apps.user
+          - python3 manage.py test apps --with-coverage --cover-package=apps.user
           - sdk track t n pipeline_id:"${REPO}" stage:Coverage status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
           - printf "\n     Coverage Analysis Succeeded\n\n"
           - sdk track t n pipeline_id:"${REPO}" stage:Pipeline status:Succeeded stage_ref:"${BRANCH}" change_id:"${COMMIT}"
